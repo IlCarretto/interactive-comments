@@ -1,0 +1,24 @@
+@import "../../styles/variables";
+
+.content {
+
+    .user {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        h4 {
+            margin: 0 10px;
+            color: $dark-blue;
+        }
+
+        span {
+            color: $grayish-blue;
+        }
+    }
+
+    .text {
+        color: $grayish-blue;
+        font-weight: $fw-regular;
+    }
+}

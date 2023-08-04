@@ -1,0 +1,23 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.actions {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+
+    .btn-reply {
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-reply h4,
+    .edit h4 {
+        color: $moderate-blue;
+        margin-left: 8px;
+    }
+
+    @include media-md() {
+        top: 20px;
+    }
+}

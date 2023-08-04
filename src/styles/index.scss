@@ -1,0 +1,66 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+// reset
+h4 {
+    margin: 0;
+}
+
+button {
+    border: none;
+}
+// common
+
+.App {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: $very-light-gray;
+}
+  
+code {
+font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.propic {
+    width: 2em;
+    height: 2em;
+
+    &.amyrobson {
+        background: url(../../images/avatars/image-amyrobson.png);
+        background-size: cover;
+        background-position: center;
+    }
+    
+    &.juliusomo {
+        background: url(../../images/avatars/image-juliusomo.png);
+        background-size: cover;
+        background-position: center;
+    }
+    
+    &.maxblagun {
+        background: url(../../images/avatars/image-maxblagun.png);
+        background-size: cover;
+        background-position: center;
+    }
+    
+    &.ramsesmiron {
+        background: url(../../images/avatars/image-ramsesmiron.png);
+        background-size: cover;
+        background-position: center;
+    }
+}
+
