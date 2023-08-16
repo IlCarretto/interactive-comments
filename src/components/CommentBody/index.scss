@@ -15,10 +15,47 @@
         span {
             color: $grayish-blue;
         }
+
+        .user-tag {
+            margin-right: 10px;
+            background: $moderate-blue;
+            width: 40px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            line-height: 100%;
+
+            span {
+                color: white;
+                font-size: .9rem;
+                font-weight: 600;
+            }
+        }
     }
 
     .text {
         color: $grayish-blue;
         font-weight: $fw-regular;
+    }
+
+    .editable-textarea {
+        width: 34rem;
+        height: 5rem;
+    }
+
+    .btn-group {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+
+        .btn-update {
+            border-radius: 8px;
+            color: #fff;
+            background: $moderate-blue;
+            padding: 12px 20px;
+            font-weight: 700;   
+            cursor: pointer
+        }
     }
 }

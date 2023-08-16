@@ -1,17 +1,69 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Comment/index.scss";
-import { IUser } from "../types/commentType";
+import { IComment, IUser, State, StateSetter } from "../types/commentType";
+import { AppAction } from "../reducers/useCommentReducer";
+import { ADD_COMMENT, ADD_REPLY } from "../actions/comments";
+import { generateUniqueId } from "../utils/generateUniqueId";
 
 interface IProps {
-  currentUser: IUser;
+  currentUser: IUser | null;
+  dispatch: React.Dispatch<AppAction>;
+  commentId?: number;
+  userReplyingTo?: string;
+  setReplyingToCommentId?: StateSetter<number | null>;
 }
 
-const AddComment = ({ currentUser }: IProps) => {
+const AddComment = ({
+  currentUser,
+  dispatch,
+  commentId,
+  userReplyingTo,
+  setReplyingToCommentId,
+}: IProps) => {
+  const [newComment, setNewComment] = useState("");
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewComment(e.target.value);
+  };
+
+  const handleSendComment = () => {
+    const comment: any = {
+      id: generateUniqueId(),
+      content: `${
+        commentId !== undefined
+          ? `@${userReplyingTo} ${newComment}`
+          : newComment
+      }`,
+      createdAt: "now",
+      score: 0,
+      user: currentUser,
+      replies: [],
+      initialScore: 0,
+    };
+    if (commentId !== undefined && setReplyingToCommentId) {
+      dispatch({ type: ADD_REPLY, payload: { commentId, comment } });
+      setReplyingToCommentId(null);
+    } else {
+      dispatch({ type: ADD_COMMENT, payload: comment });
+    }
+    setNewComment("");
+  };
+
   return (
     <div className="add-comment">
-      <textarea placeholder="Add a comment.."></textarea>
-      <div className={`propic ${currentUser.username}`}></div>
-      <button className="btn-send">SEND</button>
+      <textarea
+        value={newComment}
+        onChange={handleTextareaChange}
+        placeholder={
+          commentId !== undefined ? "Add a reply.." : "Add a comment.."
+        }
+      >
+        {commentId !== undefined ? userReplyingTo : ""}
+      </textarea>
+      <div className={`propic ${currentUser && currentUser.username}`}></div>
+      <button onClick={handleSendComment} className="btn-send">
+        {commentId !== undefined ? "REPLY" : "SEND"}
+      </button>
     </div>
   );
 };

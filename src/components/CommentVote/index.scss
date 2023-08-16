@@ -23,4 +23,8 @@
         margin-top: 0;
         margin-right: 16px;
     }
+
+    img.voted{
+        filter: brightness(0.5) hue-rotate(200deg);
+    }
 }

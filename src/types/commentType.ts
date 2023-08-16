@@ -4,7 +4,8 @@ export interface IComment {
   createdAt: string;
   score: number;
   user: IUser;
-  replies: IComment[] | null;
+  replies: IComment[];
+  initialScore: number;
 }
 
 export interface IUser {
@@ -17,5 +18,9 @@ export interface IUser {
 
 export interface State {
   comments: IComment[];
-  currentUser: IUser;
+  currentUser: IUser | null;
+}
+
+export interface StateSetter<T> {
+  (value: T | ((prevValue: T) => T)): void;
 }
