@@ -8,6 +8,10 @@ export interface IComment {
   initialScore: number;
 }
 
+export interface IReply extends IComment {
+  replyingTo: string;
+}
+
 export interface IUser {
   image: {
     png: string;

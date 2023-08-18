@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IComment, IUser } from "../../types/commentType";
+import { IComment, IUser, State } from "../../types/commentType";
 import "./index.scss";
 import CommentVote from "../CommentVote/CommentVote";
 import CommentBody from "../CommentBody/CommentBody";
@@ -21,6 +21,8 @@ const Comment = ({ comment, dispatch, currentUser }: IProps) => {
   const [replyingToCommentId, setReplyingToCommentId] = useState<number | null>(
     null
   );
+  const [replyToDelete, setReplyToDelete] = useState<IComment | null>(null);
+  const [editingReplyId, setEditingReplyId] = useState<number | null>(null);
 
   return (
     <div className="thread-container">
@@ -37,7 +39,7 @@ const Comment = ({ comment, dispatch, currentUser }: IProps) => {
         />
         <CommentVote
           score={comment.score}
-          id={comment.id}
+          commentId={comment.id}
           dispatch={dispatch}
         />
         <Actions
@@ -53,24 +55,45 @@ const Comment = ({ comment, dispatch, currentUser }: IProps) => {
         <div className="reply-container">
           {comment.replies.map((reply) => {
             return (
-              <Reply
-                setIsModalOpen={setIsModalOpen}
-                comment={comment}
-                isBeingEdited={isBeingEdited}
-                setIsBeingEdited={setIsBeingEdited}
-                currentUser={currentUser}
-                key={reply.id}
-                replyId={reply.id}
-                replyData={reply}
-                dispatch={dispatch}
-              />
+              <React.Fragment key={reply.id}>
+                <Reply
+                  setIsModalOpen={setIsModalOpen}
+                  comment={comment}
+                  isBeingEdited={editingReplyId === reply.id}
+                  setIsBeingEdited={() => setEditingReplyId(reply.id)}
+                  currentUser={currentUser}
+                  replyId={reply.id}
+                  replyData={reply}
+                  dispatch={dispatch}
+                  setReplyToDelete={setReplyToDelete}
+                />
+                {reply.replies &&
+                  reply.replies.map((nestedReply) => {
+                    return (
+                      <Reply
+                        setIsModalOpen={setIsModalOpen}
+                        comment={comment}
+                        isBeingEdited={isBeingEdited}
+                        setIsBeingEdited={setIsBeingEdited}
+                        currentUser={currentUser}
+                        key={`${reply.id}-${nestedReply.id}`}
+                        replyId={reply.id}
+                        replyData={nestedReply}
+                        dispatch={dispatch}
+                        nestedReply={nestedReply}
+                        userReplyingTo={reply.user.username}
+                      />
+                    );
+                  })}
+              </React.Fragment>
             );
           })}
         </div>
       )}
+
       {comment.id === replyingToCommentId && (
         <AddComment
-        setReplyingToCommentId={setReplyingToCommentId}
+          setReplyingToCommentId={setReplyingToCommentId}
           userReplyingTo={comment.user.username}
           commentId={comment.id}
           currentUser={currentUser}
@@ -79,9 +102,11 @@ const Comment = ({ comment, dispatch, currentUser }: IProps) => {
       )}
       {isModalOpen && (
         <Modal
+          replyData={replyToDelete}
           comment={comment}
           dispatch={dispatch}
           setIsModalOpen={setIsModalOpen}
+          isModalOpen={isModalOpen}
         />
       )}
     </div>

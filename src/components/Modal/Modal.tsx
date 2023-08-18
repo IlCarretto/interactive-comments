@@ -2,24 +2,37 @@ import React from "react";
 import "./index.scss";
 import { IComment, StateSetter } from "../../types/commentType";
 import { AppAction } from "../../reducers/useCommentReducer";
-import { DELETE_COMMENT } from "../../actions/comments";
+import { DELETE_COMMENT, DELETE_REPLY } from "../../actions/comments";
 
 interface IProps {
-  comment: IComment;
+  comment?: IComment;
   setIsModalOpen: StateSetter<boolean>;
   dispatch: React.Dispatch<AppAction>;
+  isModalOpen: boolean;
+  replyData?: IComment | null;
 }
 
-const Modal = ({ setIsModalOpen, dispatch, comment }: IProps) => {
+const Modal = ({
+  setIsModalOpen,
+  dispatch,
+  comment,
+  isModalOpen,
+  replyData,
+}: IProps) => {
   const handleDeleteComment = () => {
-    dispatch({ type: DELETE_COMMENT, payload: comment });
+    if (comment && !replyData) {
+      dispatch({ type: DELETE_COMMENT, payload: comment });
+    }
+    if (replyData) {
+      dispatch({ type: DELETE_REPLY, payload: replyData });
+    }
     setIsModalOpen(false);
   };
 
   return (
     <div className="modal-container">
-      <div className="overlay"></div>
-      <div className="modal">
+      <div className={`modal-overlay ${isModalOpen ? "active" : ""}`}></div>
+      <div className={`modal ${isModalOpen ? "active" : ""}`}>
         <div className="modal-content">
           <h2>Delete comment</h2>
           <p>

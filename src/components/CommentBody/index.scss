@@ -1,6 +1,7 @@
 @import "../../styles/variables";
 
 .content {
+    width: 100%;
 
     .user {
         display: flex;
@@ -36,11 +37,17 @@
     .text {
         color: $grayish-blue;
         font-weight: $fw-regular;
+
+        .tagged-name {
+            color: $moderate-blue;
+            margin: 0;
+            display: inline-block;
+        }
     }
 
     .editable-textarea {
-        width: 34rem;
-        height: 5rem;
+        width: 90%;
+        min-height: 100px;
     }
 
     .btn-group {

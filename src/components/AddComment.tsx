@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Comment/index.scss";
 import { IComment, IUser, State, StateSetter } from "../types/commentType";
 import { AppAction } from "../reducers/useCommentReducer";
-import { ADD_COMMENT, ADD_REPLY } from "../actions/comments";
+import { ADD_COMMENT, ADD_NESTED_REPLY, ADD_REPLY } from "../actions/comments";
 import { generateUniqueId } from "../utils/generateUniqueId";
 
 interface IProps {
@@ -11,6 +11,8 @@ interface IProps {
   commentId?: number;
   userReplyingTo?: string;
   setReplyingToCommentId?: StateSetter<number | null>;
+  parentReplyId?: number;
+  setNestedReplyingToComment?: StateSetter<number | null>;
 }
 
 const AddComment = ({
@@ -19,6 +21,8 @@ const AddComment = ({
   commentId,
   userReplyingTo,
   setReplyingToCommentId,
+  parentReplyId,
+  setNestedReplyingToComment,
 }: IProps) => {
   const [newComment, setNewComment] = useState("");
 
@@ -40,13 +44,38 @@ const AddComment = ({
       replies: [],
       initialScore: 0,
     };
-    if (commentId !== undefined && setReplyingToCommentId) {
-      dispatch({ type: ADD_REPLY, payload: { commentId, comment } });
-      setReplyingToCommentId(null);
-    } else {
-      dispatch({ type: ADD_COMMENT, payload: comment });
+    if (newComment !== "") {
+      if (commentId !== undefined && setReplyingToCommentId) {
+        dispatch({ type: ADD_REPLY, payload: { commentId, comment } });
+        setReplyingToCommentId(null);
+      } else if (
+        commentId !== undefined &&
+        parentReplyId !== undefined &&
+        setNestedReplyingToComment
+      ) {
+        const nestedReply: any = {
+          id: generateUniqueId(),
+          content: `${
+            parentReplyId !== undefined
+              ? `@${userReplyingTo} ${newComment}`
+              : newComment
+          }`,
+          createdAt: "now",
+          score: 0,
+          user: currentUser,
+          replies: [],
+          initialScore: 0,
+        };
+        dispatch({
+          type: ADD_NESTED_REPLY,
+          payload: { commentId, parentReplyId, nestedReply },
+        });
+        setNestedReplyingToComment(null);
+      } else {
+        dispatch({ type: ADD_COMMENT, payload: comment });
+      }
+      setNewComment("");
     }
-    setNewComment("");
   };
 
   return (

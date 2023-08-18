@@ -1,6 +1,6 @@
 import React from "react";
 import "./index.scss";
-import { IUser, StateSetter } from "../../types/commentType";
+import { IComment, IUser, StateSetter } from "../../types/commentType";
 
 interface IProps {
   currentUser: IUser | null;
@@ -9,20 +9,38 @@ interface IProps {
   setIsModalOpen: StateSetter<boolean>;
   setReplyingToCommentId?: StateSetter<number | null>;
   commentId?: number;
+  setNestedReplyingToComment?: StateSetter<number | null>;
+  replyId?: number;
+  replyData?: IComment;
+  setReplyToDelete?: StateSetter<IComment | null>;
 }
 
 const Actions = ({
+  replyData,
   currentUser,
   userData,
   setIsBeingEdited,
   setIsModalOpen,
   setReplyingToCommentId,
   commentId,
+  replyId,
+  setNestedReplyingToComment,
+  setReplyToDelete,
 }: IProps) => {
   const handleReplyClick = () => {
     if (setReplyingToCommentId && commentId) {
       setReplyingToCommentId(commentId);
     }
+    if (setNestedReplyingToComment && replyId) {
+      setNestedReplyingToComment(replyId);
+    }
+  };
+
+  const handleDeleteClick = () => {
+    if (replyData && setReplyToDelete) {
+      setReplyToDelete(replyData);
+    }
+    setIsModalOpen(true);
   };
 
   return (
@@ -34,7 +52,7 @@ const Actions = ({
         </button>
       ) : (
         <div className="actions-group">
-          <button className="btn-delete" onClick={() => setIsModalOpen(true)}>
+          <button className="btn-delete" onClick={handleDeleteClick}>
             <img src="/icon-delete.svg" alt="delete icon" />
             <h4>Delete</h4>
           </button>

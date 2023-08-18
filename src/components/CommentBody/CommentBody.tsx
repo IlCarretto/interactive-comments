@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import { IComment, IUser } from "../../types/commentType";
 import "./index.scss";
 import { AppAction } from "../../reducers/useCommentReducer";
-import { UPDATE_COMMENT } from "../../actions/comments";
+import { UPDATE_COMMENT, UPDATE_REPLY } from "../../actions/comments";
 
 interface IProps {
   userData: IUser;
   currentUser: IUser | null;
   createdAt: string;
-  content: string;
+  content: string | undefined;
   isBeingEdited: boolean;
   setIsBeingEdited: React.Dispatch<React.SetStateAction<boolean>>;
   dispatch: React.Dispatch<AppAction>;
   comment: IComment;
+  replyData?: IComment;
 }
 
 const CommentBody = ({
@@ -24,6 +25,7 @@ const CommentBody = ({
   dispatch,
   comment,
   setIsBeingEdited,
+  replyData,
 }: IProps) => {
   const [commentContent, setCommentContent] = useState(content);
 
@@ -32,8 +34,14 @@ const CommentBody = ({
   };
 
   const handleEditClick = () => {
-    if (content !== commentContent) {
+    if (content !== commentContent && !replyData) {
       dispatch({ type: UPDATE_COMMENT, payload: comment });
+    }
+    if (replyData && content !== commentContent) {
+      dispatch({
+        type: UPDATE_REPLY,
+        payload: { commentId: comment.id, reply: replyData },
+      });
     }
     setIsBeingEdited(false);
   };
