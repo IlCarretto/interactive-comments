@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IComment, IUser, State } from "../../types/commentType";
+import { IComment, IUser } from "../../types/commentType";
 import "./index.scss";
 import CommentVote from "../CommentVote/CommentVote";
 import CommentBody from "../CommentBody/CommentBody";

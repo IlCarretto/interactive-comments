@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Comment/index.scss";
-import { IComment, IUser, State, StateSetter } from "../types/commentType";
+import { IUser, StateSetter } from "../types/commentType";
 import { AppAction } from "../reducers/useCommentReducer";
 import { ADD_COMMENT, ADD_NESTED_REPLY, ADD_REPLY } from "../actions/comments";
 import { generateUniqueId } from "../utils/generateUniqueId";
